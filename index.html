@@ -1,36 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
 
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
+
   <title>Frontend Mentor | Todo app</title>
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Josefin Sans', sans-serif;
+      background-image: url("/images/bg-desktop-light.jpg");
+      width: 100%;
+      height: 270px;
+      background-repeat: no-repeat;
+
+    }
+    .title{
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    .task-container {
+
+
+      display: flex;
+      flex-direction: column;
+      margin: 110px auto;
+      width: 37%;
+      justify-content: center;
+
+    }
+
+    .task-list {
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
+    }
+
+    .task,
+    .input-task {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-bottom: solid 1px rgb(214, 214, 214);
+      padding: 0 15px;
+
+    }
+    .task:first-child{
+      border-top-right-radius:5px;
+      border-top-left-radius:5px;
+    }
+    .task:last-child{
+      border-bottom-right-radius:5px;
+      border-bottom-left-radius:5px;
+    }
+
+    .input-task {
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
+      margin-bottom: 25px;
+      border-radius: 5px;
+      padding: 0 15px 0 0;
+
+    }
+
+    .input-task input {
+      padding: 15px 15px 15px 0;
+    }
+
+    .task-text {
+      width: 100%;
+      padding: 20px 10px 20px 20px;
+      border: 0;
+      font-size: 20px;
+      margin-left: 20px;
+    }
+
+    .task-text:focus {
+      outline: 0;
+    }
+
+    /* The container */
+    .container {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      font-size: 18px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container input {
+      position: relative;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: rgb(209, 209, 209);
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked~.checkmark {
+      background-color: rgb(0, 140, 255);
+      transition: all 0.2s;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked~.checkmark:after {
+      display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+      left: 9px;
+      top: 5px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+
+    .add-button {
+      border: 0;
+      padding: 10px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      color: rgb(224, 224, 224);
+      background-color: rgb(24, 24, 24);
+      outline: none;
+    }
+
+    .add-button:hover {
+      background-color: rgb(51, 51, 51);
+    }
+
+    .delete-button {
+      border: 0;
+      cursor: pointer;
+      font-size: 35px;
+      color: rgb(211, 211, 211);
+      background-color: transparent;
+      outline: none;
+    }
+
+    .delete-button:hover {
+      color: rgb(255, 0, 0);
+
+    }
+
+    .completed-task {
+      text-decoration: line-through;
+      color: rgb(109, 109, 109);
+    }
+
+    .screen-mode-button{
+
+      width: 34px;
+      font-size: 30px;
+      background-color: rgba(0, 0, 0, 0.24);
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.363);
+      border-radius: 7px;
+      border:0;
+      cursor: pointer;
+      outline:none
+    }
+
+    .header{
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom:20px
+    }
+    .footer{
+      width: 100%;
+      height: 10px;
+    }
+@media all and (max-width: 800px){
+  .task-container{
+    width: 95%;
+    margin: 70px auto;
+  }
+  .header{
+    justify-content: space-evenly;
+  }
+} 
   </style>
 </head>
+
 <body>
 
-  Todo
+  <div class="task-container">
 
-  <!-- Add dynamic number --> items left
+    <div class="header">
+      <p class="title">TO DO </p>
+      <button class="screen-mode-button" type="button">☾</button>
+    </div>
+    <div class="input-task">
+      <input class="task-text" placeholder="Add a task" type="text">
+      <button class="add-button" type="button">Add</button>
+    </div>
 
-  All
-  Active 
-  Completed
+    <div class="task-list">
 
-  Clear Completed
+      <!-- <div class="task">
+        <label class="container">
+          <input class="check-box" type="checkbox">
+          <span class="checkmark"></span>
+        </label>
+        <input class="task-text" type="text">
+        <button class="delete-button" type="button">x</button>
+      </div> -->
 
-  Drag and drop to reorder list
+    </div>
 
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
   </div>
+<div class="footer">
+
+</div>
+
+  <script>
+
+    let taskListContainer = document.querySelector('.task-list');
+
+    let task = document.querySelector('.task');
+    let inputTask = document.querySelector('.input-task');
+
+    let taskText = document.querySelector('.task-text');
+    let addButton = document.querySelector('.add-button');
+    // let screenModeButton = document.querySelector('.screen-mode-button');
+    let body = document.querySelector('body');
+    let tasksArray = [];
+    let tasksCount = -1;
+    let darkMode = false;
+
+    addButton.addEventListener('click', addTask);
+    // screenModeButton.addEventListener('click',changeScreenMode);
+
+    body.addEventListener('keypress', function (e) {
+      if (e.key == 'Enter') {
+        addTask();
+      }
+    })
+
+
+
+    function addTask() {
+
+      createTask();
+      tasksArray[tasksCount].children[1].value = taskText.value;
+      tasksArray[tasksCount].children[2].addEventListener('click', deleteItem);
+      tasksArray[tasksCount].children[0].children[0].addEventListener('click', taskChecked)
+      taskText.value = ""
+
+    }
+
+    function taskChecked(e) {
+
+      let taskChecked = e.target.parentNode.parentNode.children[0].children[0].checked;
+
+      if (taskChecked == true) {
+        e.target.parentNode.parentNode.children[1].classList.add('completed-task');
+      }
+      else {
+        e.target.parentNode.parentNode.children[1].classList.remove('completed-task')
+      }
+
+    }
+
+    function deleteItem(e) {
+
+      let deleteIndex = tasksArray.indexOf(e.target.parentNode)
+      taskListContainer.removeChild(tasksArray[deleteIndex]);
+
+      if (deleteIndex > -1) {
+        tasksArray.splice(deleteIndex, 1);
+      }
+
+      tasksCount--;
+    }
+
+    function createTask() {
+      tasksCount++;
+      let task = document.createElement('DIV');
+      let container = document.createElement('LABEL');
+      let inputCheckbox = document.createElement('INPUT');
+      let span = document.createElement('SPAN');
+      let inputText = document.createElement('INPUT');
+      let deleteButton = document.createElement('BUTTON');
+
+      task.className = "task";
+      container.className = "container";
+      inputCheckbox.className = "check-box";
+      inputCheckbox.setAttribute("type", "checkbox")
+      span.className = "checkmark";
+      inputText.className = "task-text";
+      inputText.setAttribute("type", "text");
+      deleteButton.className = "delete-button";
+      deleteButton.setAttribute("type", "button");
+      deleteButton.textContent = "x";
+
+      container.appendChild(inputCheckbox);
+      container.appendChild(span);
+      task.appendChild(container);
+      task.appendChild(inputText);
+      task.appendChild(deleteButton);
+      taskListContainer.appendChild(task);
+
+      tasksArray.push(task)
+
+    }
+
+
+
+
+
+//     function changeScreenMode(e){
+
+// // set dark mode
+// let mode = e.target.textContent;
+
+
+// if(mode.textContent === "☾"){ 
+//   darkMode = true;
+//   mode.textContent = "☀";
+
+//   body.style['background-color'] = "#181824";
+//   body.style['background-image'] = 'url("/images/bg-desktop-dark.jpg")';
+
+//   tasksArray.forEach(function(i){
+//     i.style['background-color'] = "#24273c";
+//     i.style['background-color'] = "#24273c";
+//     i.children[1].style['background-color'] = "#24273c";
+//     i.children[2].style['background-color'] = "#24273c";
+//   })
+
+// }
+// // set light mode
+// else{
+//   darkMode = false;
+//   mode.textContent = "☾";
+//   body.style['background-color'] = "white";
+//   body.style['background-image'] = 'url("/images/bg-desktop-light.jpg")';
+//   tasksArray.forEach(function(i){
+//     i.style['background-color'] = "white";
+//     i.style['background-color'] = "white";
+//     i.children[1].style['background-color'] = "white";
+//     i.children[2].style['background-color'] = "white";
+//   })
+
+
+  
+// }    
+// }
+  </script>
 </body>
+
 </html>
