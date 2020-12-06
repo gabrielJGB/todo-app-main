@@ -23,6 +23,7 @@
       width: 100%;
       height: 270px;
       background-repeat: no-repeat;
+      overflow-y: scroll;
 
     }
 
@@ -84,7 +85,7 @@
       width: 100%;
       padding: 20px 10px 20px 20px;
       border: 0;
-      font-size: 20px;
+      font-size: 17px;
       margin-left: 20px;
     }
 
@@ -205,6 +206,34 @@
       margin-bottom: 20px
     }
 
+    .options {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+      background-color: white;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 5px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
+    }
+
+    .option-button {
+      padding: 7px;
+      border: 0;
+      background-color: white;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: rgb(92, 92, 92);
+    }
+
+    .option-button:hover {
+
+      color: black;
+    }
+
+
     .footer {
       width: 100%;
       height: 10px;
@@ -228,7 +257,7 @@
   <div class="task-container">
 
     <div class="header">
-      <p class="title">H1</p>
+      <p class="title">TO-DO</p>
       <button class="screen-mode-button" type="button">☾</button>
     </div>
 
@@ -237,23 +266,17 @@
       <button class="add-button" type="button">Add</button>
     </div>
 
+    <div class="options">
 
-    <div class="task-list">
-
-      <!-- <div class="task">
-        <label class="container">
-          <input class="check-box" type="checkbox">
-          <span class="checkmark"></span>
-        </label>
-        <input class="task-text" type="text">
-        <button class="delete-button" type="button">x</button>
-      </div> -->
+      <button class="option-button show-all" type="button"> All</button>
+      <button class="option-button show-active" type="button"> Active</button>
+      <button class="option-button show-completed" type="button"> Completed</button>
+      <button class="option-button clear-completed" type="button"> Clear completed</button>
 
     </div>
 
-    <div class="input-task">
-      <input class="task-text" placeholder="Add a task" type="text">
-      <button class="add-button" type="button">Add</button>
+    <div class="task-list">
+
     </div>
 
   </div>
@@ -264,10 +287,8 @@
   <script>
 
     let taskListContainer = document.querySelector('.task-list');
-
     let task = document.querySelector('.task');
     let inputTask = document.querySelector('.input-task');
-
     let title = document.querySelector('.title');
     let taskText = document.querySelector('.task-text');
     let addButton = document.querySelector('.add-button');
@@ -278,7 +299,6 @@
     let darkMode = false;
 
     addButton.addEventListener('click', addTask);
-
     screenModeButton.addEventListener('click', selectScreenMode);
 
     body.addEventListener('keypress', function (e) {
@@ -287,7 +307,7 @@
       }
     })
 
-
+    checkScreenMode(darkMode);
 
     function addTask() {
 
@@ -296,49 +316,21 @@
       tasksArray[tasksCount].children[2].addEventListener('click', deleteItem);
       tasksArray[tasksCount].children[0].children[0].addEventListener('click', taskChecked);
       taskText.value = "";
+      checkScreenMode(darkMode);
+
+    }
+
+    function checkScreenMode(darkMode) {
 
       if (darkMode) {
-        changeTasksColor("dark");
+        changeScreenMode("dark");
       }
       else {
-        changeTasksColor("light");
+        changeScreenMode("light");
       }
     }
 
-    function changeTasksColor(screenMode) {
 
-
-      if (screenMode == "light") {
-        darkMode = false;
-
-        tasksArray.forEach(function (i) {
-          i.style['background-color'] = "white";
-          i.style['background-color'] = "white";
-          i.children[1].style['background-color'] = "white";
-          i.children[1].style.color = "black";
-          i.children[2].style['background-color'] = "white";
-          i.style['border-bottom'] = "solid 1px rgb(214, 214, 214)";
-
-        })
-
-      }
-
-      else if (screenMode == "dark") {
-        darkMode = true;
-
-        tasksArray.forEach(function (i) {
-          i.style['background-color'] = "#24273c";
-          i.style['background-color'] = "#24273c";
-          i.children[1].style['background-color'] = "#24273c";
-          i.children[1].style.color = "white";
-          i.children[2].style['background-color'] = "#24273c";
-          i.style['border-bottom'] = "solid 1px #4c4c4c";
-
-        })
-
-      }
-
-    }
 
     function selectScreenMode(e) {
       e.target.textContent;
@@ -348,7 +340,6 @@
         e.target.textContent = "☀";
         e.target.style.color = "white";
         changeScreenMode("dark");
-        changeTasksColor("dark");
 
       }
       else if (e.target.textContent == "☀") {
@@ -356,7 +347,7 @@
         e.target.textContent = "☾";
         e.target.style.color = "black";
         changeScreenMode("light");
-        changeTasksColor("light");
+        
 
       }
     }
@@ -373,6 +364,16 @@
         inputTask.style['background-color'] = "white";
         title.style.color = "black";
 
+        tasksArray.forEach(function (i) {
+          i.style['background-color'] = "white";
+          i.style['background-color'] = "white";
+          i.children[1].style['background-color'] = "white";
+          i.children[1].style.color = "black";
+          i.children[2].style['background-color'] = "white";
+          i.style['border-bottom'] = "solid 1px rgb(214, 214, 214)";
+
+        })
+
       }
 
       else if (screenMode == "dark") {
@@ -383,6 +384,17 @@
         taskText.style['background-color'] = "#24273c";
         inputTask.children[0].style.color = "white";
         title.style.color = "white";
+
+        tasksArray.forEach(function (i) {
+          i.style['background-color'] = "#24273c";
+          i.style['background-color'] = "#24273c";
+          i.children[1].style['background-color'] = "#24273c";
+          i.children[1].style.color = "white";
+          i.children[2].style['background-color'] = "#24273c";
+          i.style['border-bottom'] = "solid 1px #4c4c4c";
+
+        })
+
       }
 
     }
