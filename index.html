@@ -243,6 +243,7 @@
       color: white;
       font-family: sans-serif;
       cursor: pointer;
+      
       border-radius: 5px;
 
     }
@@ -257,6 +258,11 @@
       border-radius: 5px;
       margin-bottom: 5px;
       border: solid 1px rgba(218, 218, 218, 0);
+    .option-text{
+      padding:7px 15px;
+      border-radius:5px;
+      margin-bottom:5px;
+      border:solid 1px rgba(218, 218, 218, 0);
     }
 
     .clear-completed {
@@ -305,11 +311,13 @@
       <div class="option-box show-all">
         <div class="option-text">All</div>
         <div class="all-counting">0</div>
+        <div class="all-count">0</div>
       </div>
 
       <div class="option-box show-active">
         <div class="option-text">Active</div>
         <div class="active-counting">0</div>
+        <div class="all-count">0</div>
       </div>
 
       <div class="option-box show-completed">
@@ -320,6 +328,12 @@
 
       <div class="option-box ">
         <div class="clear-completed">Clear <br>completed</div>
+        <div class="all-count">0</div>
+      </div>
+
+
+      <div class="option-box clear-completed">
+        <div>Clear <br>completed</div>
       </div>
 
     </div>
@@ -409,6 +423,30 @@
         optionText[2].style['text-decoration'] = "underline";
         optionText[2].style['font-weight'] = "bold";
         showCompleted();
+      
+      
+
+      if (option == "All") {
+        
+        optionText[0].style.border = "solid 1px white";
+        optionText[1].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px transparent";
+
+        showAll();
+      }
+      else if (option === "Active") {
+        optionText[1].style.border = "solid 1px white";
+        optionText[0].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px transparent";
+        
+        showActive();
+      }
+      else if (option === "Completed") {
+        optionText[0].style.border = "solid 1px transparent";
+        optionText[1].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px white";
+        
+        showCompleted(); 
       }
       else if (option === "Clear completed") {
         clearCompleted();
@@ -470,8 +508,12 @@
       itemsArray[itemsCount].children[2].addEventListener('click', deleteItem);
       itemsArray[itemsCount].children[0].children[0].addEventListener('click', itemChecked);
       itemText.value = "";
+<<<<<<< HEAD
       all++;
       updateCounting();
+=======
+
+>>>>>>> 4b7f786e483d4447140113b2b45acedf8496f90d
       checkScreenMode(darkMode);
 
 
@@ -525,6 +567,10 @@
           k.style['background-color'] = "white";
           k.style.color = "black"
         });
+        // optionBox.forEach(function (k) {
+        //   k.style['background-color'] = "white";
+        //   k.style.color = "black"
+        // })
 
 
         activeCounting.style.color = "black";
@@ -566,6 +612,10 @@
           k.style['background-color'] = "#24273c";
           k.style.color = "white"
         })
+        // optionBox.forEach(function (k) {
+        //   k.style['background-color'] = "#24273c";
+        //   k.style.color = "white"
+        // })
 
 
         options.style['background-color'] = "#24273c";
