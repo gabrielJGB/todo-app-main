@@ -9,7 +9,7 @@
 
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
 
-  <title>Todo app</title>
+  <title>To-do app</title>
 
   <style>
     * {
@@ -37,7 +37,7 @@
 
       display: flex;
       flex-direction: column;
-      margin: 110px auto;
+      margin: 60px auto 0 auto;
       width: 37%;
       justify-content: center;
 
@@ -179,9 +179,7 @@
     }
 
     .delete-button:hover {
-      color: rgb(255, 0, 0);
-
-
+      color: red;
     }
 
     .completed-item {
@@ -197,7 +195,8 @@
       border-radius: 7px;
       border: 0;
       cursor: pointer;
-      outline: none
+      outline: none;
+
     }
 
     .header {
@@ -207,19 +206,7 @@
       margin-bottom: 20px
     }
 
-    .options {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-evenly;
-      background-color: white;
-      padding: 15px;
-      margin-bottom: 25px;
-      border-radius: 5px;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
-    }
-
-    .option-button {
+    .button {
       padding: 7px;
       border: 0;
       background-color: white;
@@ -229,16 +216,53 @@
       color: rgb(59, 59, 59);
     }
 
-    .option-button:hover {
-
-      color: black;
+    .options {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+      background-color: white;
+      padding: 10px;
+      margin-bottom: 25px;
+      border-radius: 5px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
     }
+
 
 
     .footer {
       width: 100%;
-      height: 10px;
+      height: 500px;
     }
+
+    .option-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: sans-serif;
+      cursor: pointer;
+      border-radius: 5px;
+
+    }
+
+    .option-box:not(:last-child) {
+      width: 85px;
+      /* border: solid 1px rgba(255, 255, 255, 0.76); */
+    }
+
+    .option-text {
+      padding: 7px 15px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      border: solid 1px rgba(218, 218, 218, 0);
+    }
+
+    .clear-completed {
+      text-align: center;
+    }
+
 
     @media all and (max-width: 800px) {
       .item-container {
@@ -249,6 +273,15 @@
       .header {
         justify-content: space-evenly;
       }
+
+      .delete-button:hover {
+        color: rgb(211, 211, 211);
+      }
+
+      .add-button:hover {
+        background-color: #101010;
+      }
+
     }
   </style>
 </head>
@@ -262,17 +295,32 @@
       <button class="screen-mode-button" type="button">☾</button>
     </div>
 
-    <div class="input-item">
+    <div class="input-item ">
       <input class="item-text" placeholder="Add an item" type="text">
       <button class="add-button" type="button">Add</button>
     </div>
 
     <div class="options">
 
-      <button class="option-button show-all" type="button">All</button>
-      <button class="option-button show-active" type="button">Active</button>
-      <button class="option-button show-completed" type="button">Completed</button>
-      <button class="option-button clear-completed" type="button">Clear completed</button>
+      <div class="option-box show-all">
+        <div class="option-text">All</div>
+        <div class="all-counting">0</div>
+      </div>
+
+      <div class="option-box show-active">
+        <div class="option-text">Active</div>
+        <div class="active-counting">0</div>
+      </div>
+
+      <div class="option-box show-completed">
+        <div class="option-text">Completed</div>
+        <div class="completed-counting">0</div>
+      </div>
+
+
+      <div class="option-box ">
+        <div class="clear-completed">Clear <br>completed</div>
+      </div>
 
     </div>
 
@@ -295,18 +343,25 @@
     let addButton = document.querySelector('.add-button');
     let screenModeButton = document.querySelector('.screen-mode-button');
     let options = document.querySelector('.options');
-    let optionButton = document.querySelectorAll('.option-button')
+    let optionText = document.querySelectorAll('.option-text');
     let body = document.querySelector('body');
+    let allCounting = document.querySelector('.all-counting');
+    let activeCounting = document.querySelector('.active-counting');
+    let completedCounting = document.querySelector('.completed-counting');
+    let clearCompletedButton = document.querySelector('.clear-completed');
 
+    let active = 0;
+    let completed = 0;
+    let all = 0;
     let itemsArray = [];
-
     let itemsCount = -1;
-    let darkMode = false;
+    let darkMode = true;
 
     addButton.addEventListener('click', addItem);
     screenModeButton.addEventListener('click', selectScreenMode);
 
-    optionButton.forEach(function (i) {
+
+    optionText.forEach(function (i) {
       i.addEventListener('click', optionPressed);
     });
 
@@ -316,19 +371,43 @@
       }
     });
 
+    optionText[0].style['text-decoration'] = "underline";
+    optionText[0].style['font-weight'] = "bold";
+
     checkScreenMode(darkMode);
+
 
     function optionPressed(e) {
       let option = e.target.textContent;
 
-
       if (option == "All") {
+        optionText[1].style['font-weight'] = "normal";
+        optionText[2].style['font-weight'] = "normal";
+        optionText[1].style['text-decoration'] = "none";
+        optionText[2].style['text-decoration'] = "none";
+
+        optionText[0].style['text-decoration'] = "underline";
+        optionText[0].style['font-weight'] = "bold";
         showAll();
       }
       else if (option === "Active") {
+        optionText[0].style['font-weight'] = "normal";
+        optionText[2].style['font-weight'] = "normal";
+        optionText[0].style['text-decoration'] = "none";
+        optionText[2].style['text-decoration'] = "none";
+
+        optionText[1].style['text-decoration'] = "underline";
+        optionText[1].style['font-weight'] = "bold";
         showActive();
       }
       else if (option === "Completed") {
+        optionText[0].style['font-weight'] = "normal";
+        optionText[1].style['font-weight'] = "normal";
+        optionText[0].style['text-decoration'] = "none";
+        optionText[1].style['text-decoration'] = "none";
+
+        optionText[2].style['text-decoration'] = "underline";
+        optionText[2].style['font-weight'] = "bold";
         showCompleted();
       }
       else if (option === "Clear completed") {
@@ -372,15 +451,13 @@
 
     function clearCompleted() {
       let isChecked;
-  
-      for(let i=0; i<itemsArray.length;i++){
+      let deleteIndex = [];
+
+      for (let i = 0; i < itemsArray.length; i++) {
         isChecked = itemsArray[i].children[0].children[0].checked;
-        
-        console.log(itemsArray[i]);
-        
-        if(isChecked){
-          console.log(i)
-          itemsArray.splice(i, 1);
+
+        if (isChecked) {
+          deleteIndex[i] = i;
         }
       }
 
@@ -393,15 +470,18 @@
       itemsArray[itemsCount].children[2].addEventListener('click', deleteItem);
       itemsArray[itemsCount].children[0].children[0].addEventListener('click', itemChecked);
       itemText.value = "";
-
-
+      all++;
+      updateCounting();
       checkScreenMode(darkMode);
+
 
     }
 
     function checkScreenMode(darkMode) {
 
       if (darkMode) {
+        screenModeButton.textContent = "☀";
+        screenModeButton.style.color = "white";
         changeScreenMode("dark");
       }
       else {
@@ -413,7 +493,6 @@
 
 
       if (e.target.textContent == "☾") {
-
         e.target.textContent = "☀";
         e.target.style.color = "white";
         changeScreenMode("dark");
@@ -441,13 +520,21 @@
         inputTask.style['background-color'] = "white";
         title.style.color = "black";
 
-        optionButton.forEach(function (k) {
+
+        optionText.forEach(function (k) {
           k.style['background-color'] = "white";
           k.style.color = "black"
-        })
+        });
+
+
+        activeCounting.style.color = "black";
+        allCounting.style.color = "black";
+        completedCounting.style.color = "black";
+
+        clearCompletedButton.style.color = "black";
+
 
         options.style['background-color'] = "white";
-
 
         itemsArray.forEach(function (i) {
           i.style['background-color'] = "white";
@@ -470,7 +557,12 @@
         inputTask.children[0].style.color = "white";
         title.style.color = "white";
 
-        optionButton.forEach(function (k) {
+        clearCompletedButton.style.color = "white";
+        activeCounting.style.color = "white";
+        allCounting.style.color = "white";
+        completedCounting.style.color = "white";
+
+        optionText.forEach(function (k) {
           k.style['background-color'] = "#24273c";
           k.style.color = "white"
         })
@@ -499,16 +591,21 @@
 
       if (itemChecked == true) {
         itemContent.classList.add('completed-item');
+        completed++;
+
       }
       else {
         itemContent.classList.remove('completed-item');
-      }
+        completed--;
 
+      }
+      updateCounting();
     }
 
     function deleteItem(e) {
 
       let deleteIndex = itemsArray.indexOf(e.target.parentNode);
+
       itemListContainer.removeChild(itemsArray[deleteIndex]);
 
       if (deleteIndex > -1) {
@@ -516,6 +613,23 @@
       }
 
       itemsCount--;
+      all--;
+      active--;
+
+      completed--;
+      if (completed < 0) {
+        completed = 0;
+      }
+      updateCounting();
+    }
+
+    function updateCounting() {
+
+      active = all - completed;
+
+      allCounting.textContent = all;
+      activeCounting.textContent = active;
+      completedCounting.textContent = completed;
     }
 
     function createItem() {
@@ -550,9 +664,6 @@
       itemsArray.push(item);
 
     }
-
-
-
 
 
 
