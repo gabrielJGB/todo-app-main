@@ -207,6 +207,16 @@
       margin-bottom: 20px
     }
 
+    .button {
+      padding: 7px;
+      border: 0;
+      background-color: white;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: rgb(59, 59, 59);
+    }
+
     .options {
       display: flex;
       flex-direction: row;
@@ -219,20 +229,6 @@
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.199);
     }
 
-    .option-button {
-      padding: 7px;
-      border: 0;
-      background-color: white;
-      outline: none;
-      font-size: 16px;
-      cursor: pointer;
-      color: rgb(59, 59, 59);
-    }
-
-    .option-button:hover {
-
-      color: black;
-    }
 
 
     .footer {
@@ -240,24 +236,34 @@
       height: 500px;
     }
 
-    .option-box{
+    .option-box {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      color:white;
+      color: white;
       font-family: sans-serif;
+      cursor: pointer;
       
+      border-radius: 5px;
 
     }
-    .option-box:not(:last-child){
-      width:85px;
+
+    .option-box:not(:last-child) {
+      width: 85px;
       /* border: solid 1px rgba(255, 255, 255, 0.76); */
-      border-radius: 3px;
-      padding:5px;
-      
     }
 
+    .option-text{
+      padding:7px 15px;
+      border-radius:5px;
+      margin-bottom:5px;
+      border:solid 1px rgba(218, 218, 218, 0);
+    }
+
+    .clear-completed {
+      text-align: center;
+    }
 
 
     @media all and (max-width: 800px) {
@@ -298,29 +304,26 @@
 
     <div class="options">
 
-      <div class="option-box option-button">
-        <button class="option-button show-all" type="button">All</button>
-        <div class="all-count">
-          0
-        </div>
+      <div class="option-box show-all">
+        <div class="option-text">All</div>
+        <div class="all-count">0</div>
       </div>
 
-      <div class="option-box">
-        <button class="option-button show-active" type="button">Active</button>
-        <div class="active-count">
-          0
-        </div>
+      <div class="option-box show-active">
+        <div class="option-text">Active</div>
+        <div class="all-count">0</div>
       </div>
 
-      <div class="option-box">
-        <button class="option-button show-completed" type="button">Completed</button>
-        <div class="completed-count">
-          0
-        </div>
+      <div class="option-box show-completed">
+        <div class="option-text">Completed</div>
+        <div class="all-count">0</div>
       </div>
-      <div class="option-box">
-        <button class="option-button clear-completed" type="button">Clear completed</button>
+
+
+      <div class="option-box clear-completed">
+        <div>Clear <br>completed</div>
       </div>
+
     </div>
 
     <div class="item-list">
@@ -342,7 +345,7 @@
     let addButton = document.querySelector('.add-button');
     let screenModeButton = document.querySelector('.screen-mode-button');
     let options = document.querySelector('.options');
-    let optionButton = document.querySelectorAll('.option-button')
+    let optionText = document.querySelectorAll('.option-text');
     let body = document.querySelector('body');
 
     let itemsArray = [];
@@ -353,7 +356,8 @@
     addButton.addEventListener('click', addItem);
     screenModeButton.addEventListener('click', selectScreenMode);
 
-    optionButton.forEach(function (i) {
+
+    optionText.forEach(function (i) {
       i.addEventListener('click', optionPressed);
     });
 
@@ -368,17 +372,30 @@
     function optionPressed(e) {
       let option = e.target.textContent;
 
+      
+      
 
       if (option == "All") {
         
-     
+        optionText[0].style.border = "solid 1px white";
+        optionText[1].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px transparent";
+
         showAll();
       }
       else if (option === "Active") {
+        optionText[1].style.border = "solid 1px white";
+        optionText[0].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px transparent";
+        
         showActive();
       }
       else if (option === "Completed") {
-        showCompleted();
+        optionText[0].style.border = "solid 1px transparent";
+        optionText[1].style.border = "solid 1px transparent";
+        optionText[2].style.border = "solid 1px white";
+        
+        showCompleted(); 
       }
       else if (option === "Clear completed") {
         clearCompleted();
@@ -488,10 +505,10 @@
         inputTask.style['background-color'] = "white";
         title.style.color = "black";
 
-        optionButton.forEach(function (k) {
-          k.style['background-color'] = "white";
-          k.style.color = "black"
-        })
+        // optionBox.forEach(function (k) {
+        //   k.style['background-color'] = "white";
+        //   k.style.color = "black"
+        // })
 
         options.style['background-color'] = "white";
 
@@ -517,10 +534,10 @@
         inputTask.children[0].style.color = "white";
         title.style.color = "white";
 
-        optionButton.forEach(function (k) {
-          k.style['background-color'] = "#24273c";
-          k.style.color = "white"
-        })
+        // optionBox.forEach(function (k) {
+        //   k.style['background-color'] = "#24273c";
+        //   k.style.color = "white"
+        // })
 
 
         options.style['background-color'] = "#24273c";
