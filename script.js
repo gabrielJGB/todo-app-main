@@ -1,4 +1,3 @@
-
 let itemContainer = document.querySelector('.item-container')
 let itemList = document.querySelector('.item-list');
 let item = document.querySelector('.item');
